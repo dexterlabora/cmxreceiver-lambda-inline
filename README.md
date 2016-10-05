@@ -12,7 +12,7 @@ Meraki CMX WiFi location receiver using the AWS Lambda service by Amazon. The da
 * [CMX Lambda Function](src/cmx-lambda-inline.js)
 * [CMX Lambda - POST Test](src/cmx-post-test.json)
 * [CMX Lambda - GET Test](src/cmx-get-test.json)
-* [DynamoDB to ElasticSearch Lambda](cmxreceiver-stream-to-es)
+* [DynamoDB to ElasticSearch Lambda](src/cmxreceiver-stream-to-es)
 
 
 # Prerequisites
@@ -34,14 +34,15 @@ DynamoDB is a NoSQL database service provide by Amazon AWS. It will provide a fa
 # Instructions
 
 * Create a DynamoDB table
-  * Table Name: "cmxdata"
-  * Primary partition key: "message_id"
+  * **Table Name:** "cmxdata"
+  * **Partition key:** "message_id"
+  * **Sort key:** "message_ts"
   * More Info: [DynamoDB Manual](http://docs.aws.amazon.com/amazondynamodb/latest/gettingstartedguide/Welcome.html)
-  * ![DynamoDB table](images/dynamodb-table-screenshot.png)
+   ![DynamoDB table](images/dynamodb-table-screenshot.png)
 * Create an AWS API Gateway
   * API Gateway Name: "CMX"
   * More Info: [API Gateway Manual](http://docs.aws.amazon.com/apigateway/latest/developerguide/create-api-resources-methods.html)
-  * ![Create API Gateway](images/cmx-api-gateway-create-screenshot.png)
+   ![Create API Gateway](images/cmx-api-gateway-create-screenshot.png)
 * Create an AWS Lambda Function
   * Name: "cmxreceiver-dynamodb"
   * *skip the triggers and blueprint screens*
@@ -70,7 +71,6 @@ DynamoDB is a NoSQL database service provide by Amazon AWS. It will provide a fa
 * Network-wide --> Settings
 * * Add a Post URL: *yourserver*
 
-# AWS DynamoDB
 
 # AWS ElasticSearch & Kibana
 Once the location data is stored in DynamoDB, indexing and data visualization are best handled by ElasticSearch and Kibana. ElasticSearch will index the database and provide a RESTful API to interact with the data. Kibana leverages this API and builds a flexible reporting and visualization tool.
