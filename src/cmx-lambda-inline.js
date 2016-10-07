@@ -11,7 +11,7 @@
  * Example CMX Post URL:
  *
  * https://lexffffff.execute-api.eu-west-1.amazonaws.com/prod/cmxreceiver-dynamodb/?network=London
- * 
+ *
  * Written by Cory Guynn
  * 2016
  * www.InternetOfLEGO.com
@@ -176,6 +176,18 @@ exports.handler = (event, context, callback) => {
                         params.Item.apMac = cmxJSON['data']['apMac'];
                         params.Item.apTags = cmxJSON['data']['apTags'].toString() || "none";
                     }
+
+                    // Put Item in DynamoDB
+                    dynamo.put(params, function(err, body) {
+                       if (err) {
+                           console.log(err);
+                           context.fail('error','Insert failed: '+err);
+                       }
+                       else {
+                           console.log("DynamoDB insert SUCCESS!"+JSON.stringify(params, null, '  '));
+                           context.succeed('SUCCESS');
+                       }
+                    });
                 } // end for loop
             }else{
                 console.log("unknown CMX 'type'");
