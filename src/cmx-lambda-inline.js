@@ -12,7 +12,7 @@
  *
  * https://lexffffff.execute-api.eu-west-1.amazonaws.com/prod/cmxreceiver-dynamodb/?network=London
  *
- * Written by Cory Guynn
+ * Written by Cory Guynn with a lot of help from Michael Eagles
  * 2016
  * www.InternetOfLEGO.com
  * developers.meraki.com
@@ -50,6 +50,7 @@ exports.handler = (event, context, callback) => {
         network = event.queryStringParameters.network;
     }
 
+    // log the source IP of the client sending the POST/GET
     var sourceIP = "undefined";
     if (event.requestContext){
         sourceIP = event.requestContext.identity.sourceIp;
