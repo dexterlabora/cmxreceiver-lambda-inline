@@ -1,0 +1,101 @@
+{
+	"variables": [],
+	"info": {
+		"name": "CMX with Amazon AWS - Lambda, DynamoDB & ElasticSearch",
+		"_postman_id": "ad202050-68bf-5d6b-24a2-765fbea3636d",
+		"description": "Complete Documentation for building the application can be found here:\n\nhttps://github.com/dexterlabora/cmxreceiver-lambda-inline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sample CMX data to Lambda in-line",
+			"request": {
+				"url": "{{cmx-receiver-url}}/prod/cmxreceiver-dynamodb?network=Postman",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"version\": \"2.0\",\n    \"secret\": \"supersecret\",\n    \"type\": \"DevicesSeen\",\n    \"data\": {\n        \"apMac\": \"00:18:0a:13:dd:b0\",\n        \"apFloors\": [],\n        \"apTags\": [\n            \"\",\n            \"home\",\n            \"\"\n        ],\n        \"observations\": [\n            {\n                \"ipv4\": \"/192.168.0.56\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.20755340376944298,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:14Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:d7:7c:26\",\n                \"seenEpoch\": 1474675574,\n                \"rssi\": 56,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": null,\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 2.355135751488216,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:28Z\",\n                \"ssid\": null,\n                \"os\": \"Android\",\n                \"clientMac\": \"98:f1:70:34:1c:3e\",\n                \"seenEpoch\": 1474675588,\n                \"rssi\": 43,\n                \"ipv6\": null,\n                \"manufacturer\": \"Murata Manufacturing\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.95\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.30140056490166983,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:05:46Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": \"Generic Linux\",\n                \"clientMac\": \"74:da:38:88:7c:df\",\n                \"seenEpoch\": 1474675546,\n                \"rssi\": 53,\n                \"ipv6\": null,\n                \"manufacturer\": \"Edimax Technology\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.42\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.11936056928416994,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:40Z\",\n                \"ssid\": \"MR34 Bridge\",\n                \"os\": \"Mac OS X\",\n                \"clientMac\": \"f4:5c:89:9b:17:67\",\n                \"seenEpoch\": 1474675600,\n                \"rssi\": 53,\n                \"ipv6\": null,\n                \"manufacturer\": \"Apple\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.4\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": -0.5,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:19Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": \"iOS\",\n                \"clientMac\": \"c0:f2:fb:0b:05:e7\",\n                \"seenEpoch\": 1474675579,\n                \"rssi\": 60,\n                \"ipv6\": null,\n                \"manufacturer\": \"Apple\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.63\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.20755340376944298,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:27Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:e1:b4:7a\",\n                \"seenEpoch\": 1474675587,\n                \"rssi\": 56,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.92\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.22200004405702012,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:39Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:ce:a1:6d\",\n                \"seenEpoch\": 1474675599,\n                \"rssi\": 57,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.35\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 1.6658518302986447,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:37Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:f2:95:26\",\n                \"seenEpoch\": 1474675597,\n                \"rssi\": 46,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.69\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 0.6019477321869419,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:02Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:ed:8b:ea\",\n                \"seenEpoch\": 1474675562,\n                \"rssi\": 61,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.38\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 1.233417960754815,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:23Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": null,\n                \"clientMac\": \"18:fe:34:fc:5a:7f\",\n                \"seenEpoch\": 1474675583,\n                \"rssi\": 47,\n                \"ipv6\": null,\n                \"manufacturer\": \"Espressif\"\n            },\n            {\n                \"ipv4\": \"/192.168.0.15\",\n                \"location\": {\n                    \"lat\": 51.5355157,\n                    \"lng\": -0.06990350000000944,\n                    \"unc\": 1.5497743004111961,\n                    \"x\": [],\n                    \"y\": []\n                },\n                \"seenTime\": \"2016-09-24T00:06:40Z\",\n                \"ssid\": \".interwebs\",\n                \"os\": \"Generic Linux\",\n                \"clientMac\": \"74:da:38:56:0a:80\",\n                \"seenEpoch\": 1474675600,\n                \"rssi\": 47,\n                \"ipv6\": null,\n                \"manufacturer\": \"Edimax Technology\"\n            }\n        ]\n    }\n}"
+				},
+				"description": "This POST contains a sample JSON from a WiFi observation.\n\nNote, the \"network\" property was manually added for enhanced logging."
+			},
+			"response": []
+		},
+		{
+			"name": "Elastic Search - Manufacturer = Apple",
+			"request": {
+				"url": "{{elastic-search-url}}/_search?q=manufacturer:Apple",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Elastic Search - Type = BluetoothDevicesSeen",
+			"request": {
+				"url": "{{elastic-search-url}}/_search?q=type:BluetoothDevicesSeen",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Elastic Search - Type = DevicesSeen (WiFi)",
+			"request": {
+				"url": "{{elastic-search-url}}/_search?q=type:DevicesSeen",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Elastic Search - Type = * (All Clients)",
+			"request": {
+				"url": "{{elastic-search-url}}/_search?q=type:*",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Elastic Search - clientMac = a4:31:35:04:35:48",
+			"request": {
+				"url": "{{elastic-search-url}}/_search?q=clientMac:\"a4:31:35:04:35:48\"",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -14,6 +14,7 @@ Meraki CMX WiFi location receiver using the AWS Lambda service by Amazon. The da
   * [CMX Lambda - POST Test](src/cmx-post-test.json)
   * [CMX Lambda - GET Test](src/cmx-get-test.json)
 * [DynamoDB to ElasticSearch Lambda - Inline Function](src/cmxreceiver-stream-to-es.py)
+* [Postman Example Collection](postman/CMX-AWS.postman_collection-environment-variables-required.json)
 
 
 # Prerequisites
