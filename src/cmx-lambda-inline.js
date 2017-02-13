@@ -23,8 +23,8 @@
 
 // ******* ENTER YOUR CREDENTIALS **********
 
-var secret = "enterYourSecret"; //"enterYourSecret";
-var validator = "enterYourValidator";//"enterYourValidator";
+var secret = "yoursecret"; //"enterYourSecret";
+var validator = "12341234123412341234";//"enterYourValidator";
 var dynamoTable = "cmxdata";
 
 // *****************************************
@@ -37,6 +37,7 @@ const AWS = require('aws-sdk');
 
 //const dynamo = new doc.DynamoDB();
 const dynamo = new AWS.DynamoDB.DocumentClient();
+
 
 
 
@@ -55,6 +56,18 @@ exports.handler = (event, context, callback) => {
     if (event.requestContext){
         sourceIP = event.requestContext.identity.sourceIp;
     }
+    
+    //Callback function for DynamoDB "put"
+    function dynamoPutCallback(err, body) {
+       if (err) {
+           console.log(err);
+           context.fail('error','Insert failed: '+err);
+       }
+       else {
+           console.log("DynamoDB insert SUCCESS!"+JSON.stringify(params, null, '  '));
+           context.succeed('SUCCESS');
+       }
+    }
 
     // Handle the HTTP method
     switch (event.httpMethod) {
@@ -72,7 +85,7 @@ exports.handler = (event, context, callback) => {
 
         case 'POST':
             console.log("received CMX POST: " + event.body + " from Network "+network);
-            var cmxJSON = JSON.parse(event.body)
+            var cmxJSON = JSON.parse(event.body);
             //console.log("cmxJSON object: " + JSON.stringify(cmxJSON, null, 2));
             if(cmxJSON.secret != secret){
                 //console.log("secret invalid: "+ cmxJSON.secret);
@@ -91,104 +104,89 @@ exports.handler = (event, context, callback) => {
             }
 
             // Check CMX JSON Version
-            if (cmxJSON['version'] != '2.0'){
+            if (cmxJSON.version != '2.0'){
                 // Prevent invalid version JSON from being sent. This is to avoid changes in schema which could result in data corruption.
-                console.log("CMX Receiver is written for version 2.0 and will not accept other versions. The POST data was sent with version: "+ cmxJSON['version']);
+                console.log("CMX Receiver is written for version 2.0 and will not accept other versions. The POST data was sent with version: "+ cmxJSON.version);
                 return;
             }else{
-                console.log("working with correct version: "+cmxJSON['version']);
+                console.log("working with correct version: "+cmxJSON.version);
             }
 
 
             // Define paramaters for DynamoDB
             var params = {
                 "TableName" : dynamoTable
-                }
+                };
                 params.Item = {};
+            
 
+            
             // Loop through the JSON object and add each observation to DynamoDB schema
 
-            console.log('cmxJSON.data.apMac = '+cmxJSON.data['apMac']);
-            if(cmxJSON['type'] == "DevicesSeen"){
+            console.log('cmxJSON.data.apMac = '+cmxJSON.data.apMac);
+            var key;
+            var o = cmxJSON.data.observations;
+            if(cmxJSON.type == "DevicesSeen"){
                 console.log("type: DevicesSeen");
-                var o = cmxJSON['data']['observations'];
-                for (var key in o){
+                for (key in o){
                     if (o.hasOwnProperty(key)) {
                         //console.log("Key is " + c + ", value is " + o[c].location.lat);
-                        if (!o[key]['location']){break};
-                        if (o[key]['seenEpoch'] === null || o[key]['seenEpoch'] === 0){break};//  # This probe is useless, so ignore it
-                        params.Item.type = cmxJSON['type'];
+                        if (!o[key].location){break}
+                        if (o[key].seenEpoch=== null || o[key].seenEpoch === 0){break}//  # This probe is useless, so ignore it
+                        params.Item.type = cmxJSON.type;
                         params.Item.network = network;
                         params.Item.message_id = guid();
                         params.Item.message_ts = datetime.toString();
-                        params.Item.name = o[key]['clientMac'];
-                        params.Item.clientMac = o[key]['clientMac'];
-                        params.Item.lat = o[key]['location']['lat'];
-                        params.Item.lng = o[key]['location']['lng'];
-                        params.Item.x = o[key]['location']['x'][0];
-                        params.Item.y = o[key]['location']['y'][0];
-                        params.Item.unc = o[key]['location']['unc'];
-                        params.Item.seenString = o[key]['seenTime'];
-                        params.Item.seenEpoch = o[key]['seenEpoch'];
-                        params.Item.apFloors = cmxJSON['data']['apFloors'] || 0;
-                        params.Item.manufacturer = o[key]['manufacturer'] || "unknown";
-                        params.Item.os = o[key]['os'] || "unknown";
-                        params.Item.ssid = o[key]['ssid'] || "not connected";
-                        params.Item.ipv4 = o[key]['ipv4'] || "unknown";
-                        params.Item.ipv6 = o[key]['ipv6'] || "unknown";
-                        params.Item.apMac = cmxJSON['data']['apMac'];
-                        params.Item.apTags = cmxJSON['data']['apTags'].toString() || "none";
+                        params.Item.name = o[key].clientMac;
+                        params.Item.clientMac = o[key].clientMac;
+                        params.Item.lat = o[key].location.lat;
+                        params.Item.lng = o[key].location.lng;
+                        params.Item.x = o[key].location.x[0];
+                        params.Item.y = o[key].location.y[0];
+                        params.Item.unc = o[key].location.unc;
+                        params.Item.seenString = o[key].seenTime;
+                        params.Item.seenEpoch = o[key].seenEpoch;
+                        params.Item.apFloors = cmxJSON.data.apFloors || 0;
+                        params.Item.manufacturer = o[key].manufacturer || "unknown";
+                        params.Item.os = o[key].os || "unknown";
+                        params.Item.ssid = o[key].ssid || "not connected";
+                        params.Item.ipv4 = o[key].ipv4 || "unknown";
+                        params.Item.ipv6 = o[key].ipv6 || "unknown";
+                        params.Item.apMac = cmxJSON.data.apMac;
+                        params.Item.apTags = cmxJSON.data.apTags.toString() || "none";
                     }
                     // Put Item in DynamoDB
-                    dynamo.put(params, function(err, body) {
-                       if (err) {
-                           console.log(err);
-                           context.fail('error','Insert failed: '+err);
-                       }
-                       else {
-                           console.log("DynamoDB insert SUCCESS!"+JSON.stringify(params, null, '  '));
-                           context.succeed('SUCCESS');
-                       }
-                    });
+                    dynamo.put(params, dynamoPutCallback);
+                   
                 }  // end for loop
-            }else if(cmxJSON['type'] == "BluetoothDevicesSeen"){
+            }else if(cmxJSON.type == "BluetoothDevicesSeen"){
                 console.log("type: BluetoothDevicesSeen");
-                var o = cmxJSON['data']['observations'];
-                for (var key in o){
+                for (key in o){
                     if (o.hasOwnProperty(key)) {
                         //console.log("Key is " + c + ", value is " + o[c].location.lat);
-                        if (!o[key]['location']){break};
-                        if (o[key]['seenEpoch'] === null || o[key]['seenEpoch'] === 0){break};//  # This probe is useless, so ignore it
-                        params.Item.type = cmxJSON['type'];
+                        if (!o[key].location){break}
+                        if (o[key].seenEpoch === null || o[key].seenEpoch === 0){break}//  # This probe is useless, so ignore it
+                        params.Item.type = cmxJSON.type;
                         params.Item.message_id = guid();
                         params.Item.message_ts = datetime.toString();
                         params.Item.network = network;
-                        params.Item.name = o[key]['clientMac'];
-                        params.Item.clientMac = o[key]['clientMac'];
-                        params.Item.lat = o[key]['location']['lat'];
-                        params.Item.lng = o[key]['location']['lng'];
-                        params.Item.x = o[key]['location']['x'][0];
-                        params.Item.y = o[key]['location']['y'][0];
-                        params.Item.unc = o[key]['location']['unc'];
-                        params.Item.seenString = o[key]['seenTime'];
-                        params.Item.seenEpoch = o[key]['seenEpoch'];
-                        params.Item.apFloors = cmxJSON['data']['apFloors'] || 0;
-                        params.Item.rssi = o[key]['rssi'];
-                        params.Item.apMac = cmxJSON['data']['apMac'];
-                        params.Item.apTags = cmxJSON['data']['apTags'].toString() || "none";
+                        params.Item.name = o[key].clientMac;
+                        params.Item.clientMac = o[key].clientMac;
+                        params.Item.lat = o[key].location.lat;
+                        params.Item.lng = o[key].location.lng;
+                        params.Item.x = o[key].location.x[0];
+                        params.Item.y = o[key].location.y[0];
+                        params.Item.unc = o[key].location.unc;
+                        params.Item.seenString = o[key].seenTime;
+                        params.Item.seenEpoch = o[key].seenEpoch;
+                        params.Item.apFloors = cmxJSON.data.apFloors || 0;
+                        params.Item.rssi = o[key].rssi;
+                        params.Item.apMac = cmxJSON.data.apMac;
+                        params.Item.apTags = cmxJSON.data.apTags.toString() || "none";
                     }
 
                     // Put Item in DynamoDB
-                    dynamo.put(params, function(err, body) {
-                       if (err) {
-                           console.log(err);
-                           context.fail('error','Insert failed: '+err);
-                       }
-                       else {
-                           console.log("DynamoDB insert SUCCESS!"+JSON.stringify(params, null, '  '));
-                           context.succeed('SUCCESS');
-                       }
-                    });
+                    dynamo.put(params, dynamoPutCallback);
                 } // end for loop
             }else{
                 console.log("unknown CMX 'type'");
