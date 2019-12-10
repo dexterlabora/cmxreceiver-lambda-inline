@@ -68,6 +68,20 @@ exports.handler = (event, context, callback) => {
            context.succeed('SUCCESS');
        }
     }
+    
+    function parseVersionString (str) {
+        if (typeof(str) != 'string') { return false; }
+        var x = str.split('.');
+        // parse from string or default to 0 if can't parse
+        var maj = parseInt(x[0]) || 0;
+        var min = parseInt(x[1]) || 0;
+        var pat = parseInt(x[2]) || 0;
+        return {
+            major: maj,
+            minor: min,
+            patch: pat
+         }
+    }
 
     // Handle the HTTP method
     switch (event.httpMethod) {
@@ -104,7 +118,7 @@ exports.handler = (event, context, callback) => {
             }
 
             // Check CMX JSON Version
-            if (cmxJSON.version != '2.0'){
+            if ((parseVersionString(cmxJSON.version).major >= 2) && (parseVersionString(cmxJSON.version).major < 3)){
                 // Prevent invalid version JSON from being sent. This is to avoid changes in schema which could result in data corruption.
                 console.log("CMX Receiver is written for version 2.0 and will not accept other versions. The POST data was sent with version: "+ cmxJSON.version);
                 return;
@@ -131,8 +145,8 @@ exports.handler = (event, context, callback) => {
                 for (key in o){
                     if (o.hasOwnProperty(key)) {
                         //console.log("Key is " + c + ", value is " + o[c].location.lat);
-                        if (!o[key].location){break}
-                        if (o[key].seenEpoch=== null || o[key].seenEpoch === 0){break}//  # This probe is useless, so ignore it
+                        if (!o[key].location){continue}
+                        if (o[key].seenEpoch=== null || o[key].seenEpoch === 0){continue}//  # This probe is useless, so ignore it
                         params.Item.type = cmxJSON.type;
                         params.Item.network = network;
                         params.Item.message_id = guid();
@@ -164,8 +178,8 @@ exports.handler = (event, context, callback) => {
                 for (key in o){
                     if (o.hasOwnProperty(key)) {
                         //console.log("Key is " + c + ", value is " + o[c].location.lat);
-                        if (!o[key].location){break}
-                        if (o[key].seenEpoch === null || o[key].seenEpoch === 0){break}//  # This probe is useless, so ignore it
+                        if (!o[key].location){continue}
+                        if (o[key].seenEpoch === null || o[key].seenEpoch === 0){continue}//  # This probe is useless, so ignore it
                         params.Item.type = cmxJSON.type;
                         params.Item.message_id = guid();
                         params.Item.message_ts = datetime.toString();
