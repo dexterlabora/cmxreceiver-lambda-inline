@@ -23,9 +23,9 @@
 
 // ******* ENTER YOUR CREDENTIALS **********
 
-var secret = "yoursecret"; //"enterYourSecret";
-var validator = "12341234123412341234";//"enterYourValidator";
-var dynamoTable = "cmxdata";
+var secret = "supersecret"; //"enterYourSecret";
+var validator = "8e0846499d9a3f6c23f7868c4c25b9d6325035f5";//"enterYourValidator";
+var dynamoTable = "scanning";
 
 // *****************************************
 var datetime = new Date().getTime();
@@ -118,9 +118,10 @@ exports.handler = (event, context, callback) => {
             }
 
             // Check CMX JSON Version
-            if ((parseVersionString(cmxJSON.version).major >= 2) && (parseVersionString(cmxJSON.version).major < 3)){
+            if ((parseVersionString(cmxJSON.version).major <= 2) && (parseVersionString(cmxJSON.version).major >= 3)){
                 // Prevent invalid version JSON from being sent. This is to avoid changes in schema which could result in data corruption.
                 console.log("CMX Receiver is written for version 2.0 and will not accept other versions. The POST data was sent with version: "+ cmxJSON.version);
+                console.log('parsed', parseVersionString(cmxJSON.version).major)
                 return;
             }else{
                 console.log("working with correct version: "+cmxJSON.version);
